@@ -1,0 +1,43 @@
+@prefix atom:  <http://lv2plug.in/ns/ext/atom#> .
+@prefix lv2:   <http://lv2plug.in/ns/lv2core#> .
+@prefix pset:  <http://lv2plug.in/ns/ext/presets#> .
+@prefix rdf:   <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs:  <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix state: <http://lv2plug.in/ns/ext/state#> .
+@prefix xsd:   <http://www.w3.org/2001/XMLSchema#> .
+
+<http://bs2b.sourceforge.net/plugins/bs2b:preset:00_default>
+        a pset:Preset ;
+        lv2:appliesTo <http://bs2b.sourceforge.net/plugins/bs2b> ;
+        rdfs:label "Default" ;
+        lv2:port [
+           lv2:symbol "fcut" ;
+           pset:value 700
+        ], [
+           lv2:symbol "feed" ;
+           pset:value 4.5
+        ] .
+
+<http://bs2b.sourceforge.net/plugins/bs2b:preset:01_chu_moy>
+        a pset:Preset ;
+        lv2:appliesTo <http://bs2b.sourceforge.net/plugins/bs2b> ;
+        rdfs:label "Chu Moy" ;
+        lv2:port [
+           lv2:symbol "fcut" ;
+           pset:value 700
+        ], [
+           lv2:symbol "feed" ;
+           pset:value 6.0
+        ] .
+
+<http://bs2b.sourceforge.net/plugins/bs2b:preset:02_jan_meier>
+        a pset:Preset ;
+        lv2:appliesTo <http://bs2b.sourceforge.net/plugins/bs2b> ;
+        rdfs:label "Jan Meier" ;
+        lv2:port [
+           lv2:symbol "fcut" ;
+           pset:value 650
+        ], [
+           lv2:symbol "feed" ;
+           pset:value 9.5
+        ] .
