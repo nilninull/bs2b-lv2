@@ -12,7 +12,7 @@
         rdfs:label "Default" ;
         lv2:port [
            lv2:symbol "fcut" ;
-           pset:value 700
+           pset:value 700.0
         ], [
            lv2:symbol "feed" ;
            pset:value 4.5
@@ -24,7 +24,7 @@
         rdfs:label "Chu Moy" ;
         lv2:port [
            lv2:symbol "fcut" ;
-           pset:value 700
+           pset:value 700.0
         ], [
            lv2:symbol "feed" ;
            pset:value 6.0
@@ -36,7 +36,7 @@
         rdfs:label "Jan Meier" ;
         lv2:port [
            lv2:symbol "fcut" ;
-           pset:value 650
+           pset:value 650.0
         ], [
            lv2:symbol "feed" ;
            pset:value 9.5
