@@ -3,7 +3,6 @@
 
 <http://bs2b.sourceforge.net/plugins/bs2b>
         a lv2:Plugin ;
-        dct:replaces <urn:ladspa:4221> ;
         lv2:binary <bs2b@LIB_EXT@>  ;
         rdfs:seeAlso <bs2b.ttl> ;
         rdfs:seeAlso <bs2b_presets.ttl> .
