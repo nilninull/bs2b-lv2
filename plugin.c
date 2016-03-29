@@ -1,6 +1,16 @@
 /*
- * LADSPA bs2b effect plugin
- * Copyright (C) 2009, Sebastian Pipping <sebastian@pipping.org>
+ *  LV2 bs2b effect plugin 
+ * 
+ * 
+ * Copyright (C) 2016  nilninull
+ *
+ * Author: nilninull <nilninull@gmail.com>
+ *
+ *
+ * This program was ported from LADSPA bs2b effect plugin.
+ * <http://bs2b.sourceforge.net/>
+ * Original author is Sebastian Pipping (C) 2009 <sebastian@pipping.org>
+ *
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,32 +26,14 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-/* delay.c
-
-   Free software by Richard W.E. Furse. Do with as you will. No
-   warranty.
-
-   This LADSPA plugin provides a simple delay line implemented in
-   C. There is a fixed maximum delay length and no feedback is
-   provided.
-
-   This file has poor memory protection. Failures during malloc() will
-   not recover nicely.
-*/
-
-
-/* I'm not bs2b.sf.net member. but this url is better.'*/
+/* Which is a better place for lv2 uri? */
 #define BS2B_URI "http://bs2b.sourceforge.net/plugins/bs2b"
+/* #define BS2B_URI "https://github.com/nilninull/bs2b-lv2/plugins/bs2b" */
 
-/* #include <config.h> */
-/* #include <ladspa.h> */
-/* #include "lv2/lv2plug.in/ns/lv2core/lv2.h" */
 #include <lv2.h>
 #include <bs2b.h>
 
 #include <stdlib.h>
-/* #include <stdio.h> */
-/* #include <string.h> */
 
 #define LB_BETWEEN(min, x, max) (((x) < (min))\
 	? (min)\
@@ -66,9 +58,6 @@ typedef enum {
 
 /*****************************************************************************/
 
-typedef float LADSPA_Data ;
-
-
 /* Instance data for the bs2b plugin. */
 typedef struct {
 	t_bs2bdp bs2b;
@@ -78,16 +67,16 @@ typedef struct {
 	size_t bufferSampleCount;
 
 	/* Ports from here on */
-	LADSPA_Data * m_pfLowpass;
-	LADSPA_Data * m_pfFeeding;
+	float * m_pfLowpass;
+	float * m_pfFeeding;
 
 	/* Input audio port data location. */
-	LADSPA_Data * m_pfInputLeft;
-	LADSPA_Data * m_pfInputRight;
+	float * m_pfInputLeft;
+	float * m_pfInputRight;
 
 	/* Output audio port data location. */
-	LADSPA_Data * m_pfOutputLeft;
-	LADSPA_Data * m_pfOutputRight;
+	float * m_pfOutputLeft;
+	float * m_pfOutputRight;
 } Bs2bLine;
 
 /*****************************************************************************/
@@ -169,10 +158,10 @@ connect_port(LV2_Handle instance,
 /* Run a bs2b instance for a block of SampleCount samples. */
 static void
 run(LV2_Handle instance, uint32_t n_samples) {
-	LADSPA_Data * pfInputLeft;
-	LADSPA_Data * pfInputRight;
-	LADSPA_Data * pfOutputLeft;
-	LADSPA_Data * pfOutputRight;
+	float * pfInputLeft;
+	float * pfInputRight;
+	float * pfOutputLeft;
+	float * pfOutputRight;
 	Bs2bLine * psBs2bLine = (Bs2bLine *)instance;
 	unsigned long lSampleIndex;
 
@@ -255,20 +244,16 @@ cleanup(LV2_Handle instance) {
 	free(psBs2bLine);
 }
 
-/*****************************************************************************/
-
-/* LADSPA_Descriptor * g_psDescriptor = NULL; */
 
 /*****************************************************************************/
-
-/* _init() is called automatically when the plugin library is first
-   loaded. */
 
 static const void*
 extension_data(const char* uri)
 {
 	return NULL;
 }
+
+/*****************************************************************************/
 
 static const LV2_Descriptor descriptor = {
 	BS2B_URI,
@@ -280,11 +265,6 @@ static const LV2_Descriptor descriptor = {
 	cleanup,
 	extension_data
 };
-
-
-/*****************************************************************************/
-
-/* _fini() is called automatically when the library is unloaded. */
 
 /*****************************************************************************/
 
