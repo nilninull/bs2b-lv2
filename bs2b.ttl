@@ -10,7 +10,7 @@
         a lv2:Plugin ,
           lv2:SimulatorPlugin ;
         doap:name "Bauer stereophonic-to-binaural" ;
-        doap:license <http://opensource.org/licenses/isc> ;
+        doap:license <http://usefulinc.com/doap/licenses/gpl> ;
 
         # LB_PORT_LOWPASS,
         # LB_PORT_FEEDING,
