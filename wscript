@@ -4,7 +4,7 @@ import re
 
 # Variables for 'waf dist'
 APPNAME = 'bs2b.lv2'
-VERSION = '1.0.0'
+VERSION = '0.0.0'
 
 # Mandatory variables
 top = '.'
@@ -25,8 +25,6 @@ def configure(conf):
 
     autowaf.check_pkg(conf, 'libbs2b', uselib_store='BS2B',
                       atleast_version='3.1.0', mandatory=True)
-
-    # conf.check(features='c cshlib', lib='m', uselib_store='M', mandatory=False)
 
     autowaf.display_msg(conf, 'LV2 bundle directory', conf.env.LV2DIR)
     print('')
@@ -65,6 +63,5 @@ def build(bld):
               target       = '%s/bs2b' % bundle,
               install_path = '${LV2DIR}/%s' % bundle,
               uselib       = 'LV2 BS2B',
-              # uselib       = 'M LV2 BS2B',
               includes     = includes)
     obj.env.cshlib_PATTERN = module_pat
