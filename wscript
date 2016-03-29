@@ -4,7 +4,7 @@ import re
 
 # Variables for 'waf dist'
 APPNAME = 'bs2b.lv2'
-VERSION = '0.0.0'
+VERSION = '0.1.0'
 
 # Mandatory variables
 top = '.'
