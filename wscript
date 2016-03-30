@@ -10,9 +10,16 @@ VERSION = '0.1.0'
 top = '.'
 out = 'build'
 
+default_lv2dir = '/usr/lib/lv2'
+
+
 def options(opt):
     opt.load('compiler_c')
     autowaf.set_options(opt)
+    opt.add_option('--lv2dir', action='store', dest='lv2dir', type='string',
+                   default=default_lv2dir,
+                   help='Plugin install path [default: %s]' % default_lv2dir)
+
 
 def configure(conf):
     conf.load('compiler_c')
@@ -26,8 +33,10 @@ def configure(conf):
     autowaf.check_pkg(conf, 'libbs2b', uselib_store='BS2B',
                       atleast_version='3.1.0', mandatory=True)
 
+    conf.env.LV2DIR = conf.options.lv2dir
     autowaf.display_msg(conf, 'LV2 bundle directory', conf.env.LV2DIR)
     print('')
+
 
 def build(bld):
     bundle = 'bs2b.lv2'
