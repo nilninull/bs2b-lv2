@@ -176,6 +176,25 @@ run(LV2_Handle instance, uint32_t n_samples) {
 	pfOutputLeft = psBs2bLine->m_pfOutputLeft;
 	pfOutputRight = psBs2bLine->m_pfOutputRight;
 
+	/* bs2b_cross_feed_f increase cpu usage while all 0 inputs. 
+	   First time (before using the plugin) does not increase cpus.
+	   But once used, the cpu usage was up.
+	   Below codes simply skip for avoiding this situations. 
+	   I couldn't find other way for fix this. */
+	
+	for (lSampleIndex = 0; lSampleIndex < n_samples; lSampleIndex++) {
+		if (pfInputLeft[lSampleIndex] != 0 || pfInputRight[lSampleIndex] != 0)
+			break;
+	}
+	
+	if (lSampleIndex == n_samples) {
+		for (lSampleIndex = 0; lSampleIndex < n_samples; lSampleIndex++) {
+			pfOutputLeft[lSampleIndex] = 0;
+			pfOutputRight[lSampleIndex] = 0;
+		}
+		return;
+	}
+
 	/* Re-allocate when needed */
 	if (n_samples > psBs2bLine->bufferSampleCount) {
 		float * const reallocated
