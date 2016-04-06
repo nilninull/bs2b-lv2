@@ -4,7 +4,7 @@ import re
 
 # Variables for 'waf dist'
 APPNAME = 'bs2b.lv2'
-VERSION = '0.1.0'
+VERSION = '1.0.0'
 
 # Mandatory variables
 top = '.'
@@ -52,7 +52,7 @@ def build(bld):
         install_path = '${LV2DIR}/%s' % bundle,
         LIB_EXT      = module_ext)
 
-    # Copy other data files to build bundle (build/eg-amp.lv2)
+    # Copy other data files to build bundle
     for i in ['bs2b.ttl', 'bs2b_presets.ttl']:
         bld(features     = 'subst',
             is_copy      = True,
