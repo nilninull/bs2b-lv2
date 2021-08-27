@@ -2,7 +2,7 @@
  *  LV2 bs2b effect plugin 
  * 
  * 
- * Copyright (C) 2016  nilninull
+ * Copyright (C) 2016, 2021  nilninull
  *
  * Author: nilninull <nilninull@gmail.com>
  *
@@ -14,7 +14,7 @@
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 2 of the License, or
+ * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  *
  * This program is distributed in the hope that it will be useful,
@@ -133,22 +133,22 @@ connect_port(LV2_Handle instance,
 	Bs2bLine * psBs2bLine = (Bs2bLine *)instance;
 	switch ((PortIndex)port) {
 	case LB_PORT_LOWPASS:
-		psBs2bLine->m_pfLowpass = data;
+		psBs2bLine->m_pfLowpass = (float *) data;
 		break;
 	case LB_PORT_FEEDING:
-		psBs2bLine->m_pfFeeding = data;
+		psBs2bLine->m_pfFeeding = (float *) data;
 		break;
 	case LB_PORT_INPUT_LEFT:
-		psBs2bLine->m_pfInputLeft = data;
+		psBs2bLine->m_pfInputLeft = (float *) data;
 		break;
 	case LB_PORT_INPUT_RIGHT:
-		psBs2bLine->m_pfInputRight = data;
+		psBs2bLine->m_pfInputRight = (float *) data;
 		break;
 	case LB_PORT_OUTPUT_LEFT:
-		psBs2bLine->m_pfOutputLeft = data;
+		psBs2bLine->m_pfOutputLeft = (float *) data;
 		break;
 	case LB_PORT_OUTPUT_RIGHT:
-		psBs2bLine->m_pfOutputRight = data;
+		psBs2bLine->m_pfOutputRight = (float *) data;
 		break;
 	}
 }
@@ -198,7 +198,7 @@ run(LV2_Handle instance, uint32_t n_samples) {
 	/* Re-allocate when needed */
 	if (n_samples > psBs2bLine->bufferSampleCount) {
 		float * const reallocated
-				= realloc(psBs2bLine->alternatingBuffer,
+				= (float *) realloc(psBs2bLine->alternatingBuffer,
 				sizeof(float) * n_samples * 2);
 		if (reallocated) {
 			psBs2bLine->alternatingBuffer = reallocated;
