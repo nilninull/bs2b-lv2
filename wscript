@@ -1,56 +1,44 @@
 #!/usr/bin/env python
-from waflib.extras import autowaf as autowaf
-import re
 
-# Variables for 'waf dist'
+from waflib.extras import autowaf
+
 APPNAME = 'bs2b.lv2'
 VERSION = '1.0.0'
+top     = '.'
+out     = 'build'
 
-# Mandatory variables
-top = '.'
-out = 'build'
-
-default_lv2dir = '/usr/lib/lv2'
-
+# Release variables
+title        = 'BS2B.lv2'
+uri          = 'https://github.com/nilninull/bs2b-lv2'
+# dist_pattern = ''
+post_tags    = ['LV2', 'BS2B.lv2']
 
 def options(opt):
     opt.load('compiler_c')
-    autowaf.set_options(opt)
-    opt.add_option('--lv2dir', action='store', dest='lv2dir', type='string',
-                   default=default_lv2dir,
-                   help='Plugin install path [default: %s]' % default_lv2dir)
-
+    opt.load('lv2')
 
 def configure(conf):
-    conf.load('compiler_c')
-    autowaf.configure(conf)
-    autowaf.set_c99_mode(conf)
-    autowaf.display_header('Bs2b Configuration')
+    conf.load('compiler_c', cache=True)
+    conf.load('lv2', cache=True)
+    conf.load('autowaf', cache=True)
+    autowaf.set_c_lang(conf, 'c99')
 
-    if not autowaf.is_child():
-        autowaf.check_pkg(conf, 'lv2', uselib_store='LV2')
+    conf.check_pkg('lv2 >= 1.16.0', uselib_store='LV2')
+    conf.run_env.append_unique('LV2_PATH', [conf.build_path('lv2')])
+    autowaf.display_summary(conf, {'LV2 bundle directory': conf.env.LV2DIR})
 
     autowaf.check_pkg(conf, 'libbs2b', uselib_store='BS2B',
                       atleast_version='3.1.0', mandatory=True)
 
-    conf.env.LV2DIR = conf.options.lv2dir
-    autowaf.display_msg(conf, 'LV2 bundle directory', conf.env.LV2DIR)
-    print('')
-
-
 def build(bld):
     bundle = 'bs2b.lv2'
-
-    # Make a pattern for shared objects without the 'lib' prefix
-    module_pat = re.sub('^lib', '', bld.env.cshlib_PATTERN)
-    module_ext = module_pat[module_pat.rfind('.'):]
 
     # Build manifest.ttl by substitution (for portable lib extension)
     bld(features     = 'subst',
         source       = 'manifest.ttl.in',
         target       = '%s/%s' % (bundle, 'manifest.ttl'),
         install_path = '${LV2DIR}/%s' % bundle,
-        LIB_EXT      = module_ext)
+        LIB_EXT      = bld.env.LV2_LIB_EXT)
 
     # Copy other data files to build bundle
     for i in ['bs2b.ttl', 'bs2b_presets.ttl']:
@@ -60,17 +48,10 @@ def build(bld):
             target       = '%s/%s' % (bundle, i),
             install_path = '${LV2DIR}/%s' % bundle)
 
-    # Use LV2 headers from parent directory if building as a sub-project
-    includes = None
-    if autowaf.is_child:
-        includes = '../..'
-
     # Build plugin library
-    obj = bld(features     = 'c cshlib',
+    obj = bld(features     = 'c cshlib lv2lib',
               source       = 'plugin.c',
               name         = 'bs2b',
               target       = '%s/bs2b' % bundle,
               install_path = '${LV2DIR}/%s' % bundle,
-              uselib       = 'LV2 BS2B',
-              includes     = includes)
-    obj.env.cshlib_PATTERN = module_pat
+              uselib       = 'LV2 BS2B')
