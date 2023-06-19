@@ -3,7 +3,7 @@
 from waflib.extras import autowaf
 
 APPNAME = 'bs2b.lv2'
-VERSION = '1.1.0'
+VERSION = '1.1.1'
 top     = '.'
 out     = 'build'
 
